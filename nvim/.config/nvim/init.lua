@@ -32,3 +32,24 @@ require("toggleterm").setup({
 	direction="horizontal",
 	start_in_insert=true,
 })
+local lspconfig = require("lspconfig")
+lspconfig.lua_ls.setup({})
+lspconfig.pyright.setup({})
+lspconfig.clangd.setup({})
+
+local cmp = require("cmp")
+cmp.setup({
+  snippet = {
+    expand = function(args)
+      require("luasnip").lsp_expand(args.body)
+    end
+  },
+  sources = {
+    { name = "nvim_lsp" }
+  },
+  mapping = cmp.mapping.preset.insert({
+    ["<Tab>"] = cmp.mapping.select_next_item(),
+    ["<S-Tab>"] = cmp.mapping.select_prev_item(),
+    ["<CR>"] = cmp.mapping.confirm({ select = true }),
+  }),
+})
