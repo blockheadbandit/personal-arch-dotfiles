@@ -1,3 +1,4 @@
+--setting up lazynvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
 	vim.fn.system({
@@ -19,12 +20,10 @@ require("lazy").setup({
 	{"nvim-telescope/telescope.nvim", tag = '0.1.8', dependencies = {'nvim-lua/plenary.nvim'}},
 	require("colorscheme")
 })
-
+-- plugin setups
+-- UI features
 require("lualine").setup()
-require("nvim-tree").setup({
-	view={width=30,},
-})
-
+require("nvim-tree").setup({view={width=30,},})
 vim.opt.number = true
 require("nvim-tree.api").tree.open()
 require("toggleterm").setup({
@@ -33,6 +32,7 @@ require("toggleterm").setup({
 	direction="horizontal",
 	start_in_insert=true,
 })
+-- language servers
 local lspconfig = require("lspconfig")
 lspconfig.lua_ls.setup({
 	settings = {
@@ -46,7 +46,7 @@ lspconfig.lua_ls.setup({
 })
 lspconfig.pyright.setup({})
 lspconfig.clangd.setup({})
-
+-- completion
 local cmp = require("cmp")
 cmp.setup({
   snippet = {
@@ -63,12 +63,16 @@ cmp.setup({
     ["<CR>"] = cmp.mapping.confirm({ select = true }),
   }),
 })
+-- telescope fuzzy find
 require('telescope').setup{}
 local builtin = require("telescope.builtin")
 vim.keymap.set("n", "<leader>ff", function()
   require('telescope.builtin').find_files({
     hidden = true,     -- show hidden files (like .gitignore, .config)
   })
-end, { desc = "Find all files recursively, including hidden and ignored" })
+end, { desc = "Find all files recursively, including hidden" })
+-- misc 
+-- todo, line numbers, keymappings
+
 
 
