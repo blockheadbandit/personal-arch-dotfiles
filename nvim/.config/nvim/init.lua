@@ -18,11 +18,19 @@ require("lazy").setup({
 	{"L3MON4D3/LuaSnip"},
 	{"lewis6991/gitsigns.nvim"},
 	{"nvim-telescope/telescope.nvim", tag = '0.1.8', dependencies = {'nvim-lua/plenary.nvim'}},
+	{"folke/trouble.nvim",opts = {}, cmd="Trouble", Keys = {
+		{"<leader>dt","<cmd>Trouble diagnostics toggle<cr>",desc = "Diagnostics (Trouble)",},
+		{"<leader>dT","<cmd>Trouble diagnostics toggle filter.buf=0<cr>",desc = "Buffer Diagnostics (Trouble)",},
+		{"<leader>cs","<cmd>Trouble symbols toggle focus=false<cr>",desc = "Symbols (Trouble)",},
+		{"<leader>cl","<cmd>Trouble lsp toggle focus=false win.position=right<cr>",desc = "LSP Definitions / references / ... (Trouble)",},
+    		{"<leader>dL","<cmd>Trouble loclist toggle<cr>",desc = "Location List (Trouble)",},
+    		{"<leader>dQ","<cmd>Trouble qflist toggle<cr>",desc = "Quickfix List (Trouble)",},
+	}},
 	require("colorscheme")
 })
 -- plugin setups
 -- UI features
-require("lualine").setup()
+require("lualine").setup({})
 require("nvim-tree").setup({view={width=30,},})
 vim.opt.number = true
 require("nvim-tree.api").tree.open()
@@ -64,8 +72,12 @@ cmp.setup({
   }),
 })
 -- telescope fuzzy find
-require('telescope').setup{}
-local builtin = require("telescope.builtin")
+local actions = require("telescope.actions")
+local open_with_trouble = require("trouble.sources.telescope").open
+local add_to_trouble = require("trouble.sources.telescope").add
+require('telescope').setup{
+	defaults = {mappings = { i = { ["<c-t>"] = open_with_trouble },n = { ["<c-t>"] = open_with_trouble },}}
+}
 vim.keymap.set("n", "<leader>ff", function()
   require('telescope.builtin').find_files({
     hidden = true,     -- show hidden files (like .gitignore, .config)
@@ -73,6 +85,3 @@ vim.keymap.set("n", "<leader>ff", function()
 end, { desc = "Find all files recursively, including hidden" })
 -- misc 
 -- todo, line numbers, keymappings
-
-
-
